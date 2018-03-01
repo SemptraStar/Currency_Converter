@@ -40,7 +40,6 @@ namespace CurrencyConverter.Api
         List<Trade> TradesHistoricalData(string symbolId, DateTime start, DateTime end);
         List<Trade> TradesHistoricalData(string symbolId, DateTime start, int limit);
 
-
         Quote QuotesCurrentDataSymbol(string symbolId);
 
         List<Quote> QuotesCurrentDataAll();
