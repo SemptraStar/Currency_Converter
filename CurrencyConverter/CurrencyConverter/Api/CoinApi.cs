@@ -10,7 +10,7 @@ using CurrencyConverter.Models;
 
 namespace CurrencyConverter.Api
 {
-    public class CoinApi
+    public class CoinApi : ICoinApi
     {
         private string _apiKey;
 

@@ -6,42 +6,42 @@
 
         public string Text { get; set; }
 
-        public string in_reply_to_screen_name { get; set; }
+        public string InReplyToScreenName { get; set; }
 
         public bool Truncated { get; set; }
 
         public bool Retweeted { get; set; }
 
-        public string in_reply_to_status_id_str { get; set; }
+        public string InReplyToStatusIdStr { get; set; }
 
         public string Source { get; set; }
 
         public string CreatedAt { get; set; }
 
-        public string in_reply_to_user_id_str { get; set; }
+        public string InReplyToUserIdStr { get; set; }
 
         public object geo { get; set; }
 
-        public long retweet_count { get; set; }
+        public long RetweetCount { get; set; }
 
-        public object contributors { get; set; }
+        public object Contributors { get; set; }
 
-        public string id_str { get; set; }
+        public string IdStr { get; set; }
 
-        public Entities entities { get; set; }
+        public Entities Entities { get; set; }
 
-        public object place { get; set; }
+        public object Place { get; set; }
 
-        public object coordinates { get; set; }
+        public object Coordinates { get; set; }
 
-        public User user { get; set; }
+        public User User { get; set; }
 
-        public long? in_reply_to_user_id { get; set; }
+        public long? InReplyToUserId { get; set; }
 
-        public long id { get; set; }
+        public long Id { get; set; }
 
-        public bool favorited { get; set; }
+        public bool Favorited { get; set; }
 
-        public bool possibly_sensitive { get; set; }
+        public bool PossiblySensitive { get; set; }
     }
 }

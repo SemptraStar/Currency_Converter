@@ -12,14 +12,19 @@ namespace CurrencyConverter.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private ICoinApi _coinApi;
+
+        public ValuesController(ICoinApi coinApi)
+        {
+            _coinApi = coinApi;
+        }
+
         // GET api/values
         // Example with twitter posts
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Trade Get()
         {
-            CoinApi api = new CoinApi("6360037B-6081-47B6-8EB9-F8FFC17C9A47");
-
-            return api.TwitterLastData().Take(10).Select(x => x.Text);
+            return _coinApi.TradesLatestDataAll(1).FirstOrDefault();
         }
     }
 }

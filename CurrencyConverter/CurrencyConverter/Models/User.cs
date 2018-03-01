@@ -64,7 +64,7 @@
 
         public long StatusesCount { get; set; }
 
-        public string pProfileTextColor { get; set; }
+        public string ProfileTextColor { get; set; }
 
         public long Id { get; set; }
 
