@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using CurrencyConverter.Api;
+using CurrencyConverter.Api.Interfaces;
 
 namespace CurrencyConverter
 {
@@ -29,6 +30,7 @@ namespace CurrencyConverter
             services.AddMvc();
 
             services.AddTransient<ICoinApi>(_ => new CoinApi(Configuration["ApiKey"]));
+            services.AddTransient<IUahNBUApi, UahNBUApi>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,7 +44,7 @@ namespace CurrencyConverter
             app.UseMvc(routes => 
                 routes.MapRoute(
                     name: "default", 
-                    template: "api/{controller=Currency}/{action=Index}"
+                    template: "api/{controller=Currency}/{action=GetAllAssets}"
                 ));
         }
     }

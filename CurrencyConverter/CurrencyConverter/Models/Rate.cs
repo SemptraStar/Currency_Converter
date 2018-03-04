@@ -15,5 +15,4 @@ namespace CurrencyConverter.Models
         [JsonProperty("rate")]
         public decimal RateAmount { get; set; }
     }
-
 }

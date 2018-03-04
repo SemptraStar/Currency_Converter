@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/currency",
+      "launchUrl": "api/currency/assets",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -19,7 +19,7 @@
     "CurrencyConverter": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/currency",
+      "launchUrl": "api/currency/assets",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

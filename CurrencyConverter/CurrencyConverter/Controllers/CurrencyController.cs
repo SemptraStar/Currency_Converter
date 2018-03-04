@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Newtonsoft.Json;
-
-using CurrencyConverter.Api;
+using CurrencyConverter.Api.Interfaces;
 using CurrencyConverter.Models;
 
 namespace CurrencyConverter.Controllers
@@ -16,14 +13,13 @@ namespace CurrencyConverter.Controllers
     {
         private ICoinApi _coinApi;
 
-        public CurrencyController(ICoinApi coinApi)
+        private IUahNBUApi _uahNbuApi;
+
+        public CurrencyController(ICoinApi coinApi, IUahNBUApi uahNBUApi)
         {
             _coinApi = coinApi;
-        }
 
-        public IEnumerable<Twitter> Index()
-        {
-            return _coinApi.TwitterLastData(10);
+            _uahNbuApi = uahNBUApi;
         }
 
         [HttpGet]
@@ -34,17 +30,72 @@ namespace CurrencyConverter.Controllers
         }
 
         [HttpGet]
+        [Route("api/currency/exchangerate/{baseId}")]
+        public JsonResult GetExchangeRate(string baseId)
+        {
+            return Json(_coinApi.ExchangeRatesGetAllCurrentRates(baseId));
+        }
+
+        [HttpGet]
         [Route("api/currency/exchangerate/{baseId}/{quoteId}")]
         public JsonResult GetExchangeRate(string baseId, string quoteId)
         {
-            return Json(_coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId));
+            Exchangerate rate;
+
+            if (baseId.ToUpper() == "UAH" || quoteId.ToUpper() == "UAH")
+            {
+                rate = GetUahExchangeRate(baseId, quoteId);
+            }
+            else
+            {
+                rate = _coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId);
+            }
+
+            return Json(rate);
         }
 
         [HttpGet]
         [Route("api/currency/exchangerate/{baseId}/{quoteId}/{time}")]
         public JsonResult GetExchangeRate(string baseId, string quoteId, DateTime time)
         {
-            return Json(_coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId, time));
+            Exchangerate rate;
+
+            if (baseId.ToUpper() == "UAH" || quoteId.ToUpper() == "UAH")
+            {
+                rate = GetUahExchangeRate(baseId, quoteId, time);
+            }
+            else
+            {
+                rate = _coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId, time);
+            }
+
+            return Json(rate);
+        }
+
+        private Exchangerate GetUahExchangeRate(string baseId, string quoteId, DateTime time)
+        {
+            Exchangerate rate = _coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId, time);
+
+            if (rate.Rate != 0)
+                return rate;
+
+            if (baseId.ToUpper() == "UAH")
+            {
+                rate = (Exchangerate)_uahNbuApi.ExchangeRatesGetSpecificRate(quoteId, time);
+            }
+            else if (quoteId.ToUpper() == "UAH")
+            {
+                rate = (Exchangerate)_uahNbuApi.ExchangeRatesGetSpecificRate(baseId, time);
+
+                rate.AssetIdBase = baseId;
+                rate.AssetIdQuote = "UAH";
+            }
+
+            return rate;
+        }
+        private Exchangerate GetUahExchangeRate(string baseId, string quoteId)
+        {
+            return GetUahExchangeRate(baseId, quoteId, DateTime.Now);
         }
     }
 }

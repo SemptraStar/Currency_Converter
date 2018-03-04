@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using CurrencyConverter.Models;
 
-namespace CurrencyConverter.Api
+namespace CurrencyConverter.Api.Interfaces
 {
     public interface ICoinApi
     {

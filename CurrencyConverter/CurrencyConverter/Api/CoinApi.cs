@@ -6,6 +6,7 @@ using System.Net.Http;
 
 using Newtonsoft.Json;
 
+using CurrencyConverter.Api.Interfaces;
 using CurrencyConverter.Models;
 
 namespace CurrencyConverter.Api
@@ -16,7 +17,7 @@ namespace CurrencyConverter.Api
 
         private string _dateFormat = "yyyy-MM-ddTHH:mm:ss.fff";
 
-        private static string WebUrl = "https://rest.coinapi.io";// "https://rest-test.coinapi.io";
+        private static string WebUrl = "https://rest.coinapi.io"; // "https://rest-test.coinapi.io";
 
         public CoinApi(string apikey)
         {
