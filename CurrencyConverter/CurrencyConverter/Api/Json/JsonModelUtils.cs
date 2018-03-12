@@ -97,6 +97,8 @@ namespace CurrencyConverter.Api.Json
             JToken exchangeRateData = JArray.Parse(jsonResult)
                 .FirstOrDefault(x => x["currency_code"].ToString().ToUpper() == baseAsset.AssetId);
 
+            decimal rate = Convert.ToDecimal(exchangeRateData["rate"].ToString(), CultureInfo.InvariantCulture);
+
             return new ExchangeRate
             {
                 AssetBase = baseAsset,
@@ -106,7 +108,7 @@ namespace CurrencyConverter.Api.Json
                     Name = exchangeRateData["name"].ToString(),
                     IsTypeCrypto = false
                 },
-                Rate = Convert.ToDecimal(exchangeRateData["rate"]),
+                Rate = rate,
                 Time = DateTime.Now
             };
         }

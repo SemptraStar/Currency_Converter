@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -24,7 +25,7 @@ namespace CurrencyConverter.Api.Jobs
 
             _currencyApi = currencyApi;
 
-            LoadCurrenciesNames();
+            _currencyCodeNames = LoadCurrenciesNames();
         }
 
         public override void Execute()
@@ -65,15 +66,15 @@ namespace CurrencyConverter.Api.Jobs
             _dbContext.SaveChanges();      
         }
 
-        private void LoadCurrenciesNames()
+        private Dictionary<string, AssetData> LoadCurrenciesNames()
         {
-            _currencyCodeNames = new Dictionary<string, AssetData>();
+            var currenciesNames = new Dictionary<string, AssetData>();
 
             string jsonCurrencyData;
 
-            using (StreamReader r = new StreamReader(@"D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter.Api\currencies.json"))
+            using (var reader = new StreamReader("wwwroot/currencies.json"))
             {
-                jsonCurrencyData = r.ReadToEnd();
+                jsonCurrencyData = reader.ReadToEnd();
             }
 
             JObject currenciesObject = JObject.Parse(jsonCurrencyData);
@@ -82,7 +83,7 @@ namespace CurrencyConverter.Api.Jobs
             {
                 var asset = prop.Value;
 
-                _currencyCodeNames.Add(prop.Name,
+                currenciesNames.Add(prop.Name,
                     new AssetData
                     {
                         Name = asset["name"].ToString(),
@@ -90,6 +91,8 @@ namespace CurrencyConverter.Api.Jobs
                         SymbolNavive = asset["symbol_native"].ToString()
                     });
             }
+
+            return currenciesNames;
         }
     }
 

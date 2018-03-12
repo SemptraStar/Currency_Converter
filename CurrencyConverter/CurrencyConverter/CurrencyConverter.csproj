@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.6.17" />
     <PackageReference Include="HangFire.Core" Version="1.6.17" />
     <PackageReference Include="HangFire.SqlServer" Version="1.6.17" />
@@ -26,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Api\currencies.json" />
+    <None Include="wwwroot\currencies.json" />
   </ItemGroup>
 
 </Project>

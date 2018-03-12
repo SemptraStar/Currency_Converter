@@ -22,6 +22,7 @@ namespace CurrencyConverter
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseSetting("detailedErrors", "true")
                 .Build();
     }
 }
