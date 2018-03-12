@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Hosting;
+
+using Hangfire;
+using Hangfire.SqlServer;
 
 using CurrencyConverter.Api;
 using CurrencyConverter.Api.Interfaces;
 using CurrencyConverter.Data;
-using CurrencyConverter.Api.Services;
-using Microsoft.EntityFrameworkCore;
+using CurrencyConverter.Api.Jobs;
 
 namespace CurrencyConverter
 {
@@ -36,11 +34,13 @@ namespace CurrencyConverter
             services.AddDbContext<CurrencyContext>(options => options.UseSqlServer(Configuration["ConnectionString"]));
             services.AddScoped<IDbContext>(provider => provider.GetService<CurrencyContext>());
 
-            services.AddTransient<ICoinApi>(_ => new CoinApi(Configuration["ApiKey"]));
-            services.AddTransient<IUahNBUApi, UahNBUApi>();
+            services.AddTransient<ICurrencyApi, CurrencyApi>();
+            
+            services.AddSingleton<IBackgroundJobProcess, AssetsUpdateJob>();
 
-            services.AddSingleton<IHostedService, AssetsUpdateService>();
-            services.AddSingleton<IHostedService, ExchangeRatesUpdateService>();
+            services.AddHangfire(options => options.UseSqlServerStorage(Configuration["ConnectionString"]));
+
+            ConfigureJobs(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +56,20 @@ namespace CurrencyConverter
                     name: "default", 
                     template: "api/{controller=Currency}/{action=GetAllAssets}"
                 ));
+
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
+        }
+
+        private void ConfigureJobs(IServiceCollection services)
+        {
+            JobStorage.Current = new SqlServerStorage(Configuration["ConnectionString"]);
+            
+            IEnumerable<IBackgroundJobProcess> jobs = services.BuildServiceProvider().GetServices<IBackgroundJobProcess>();
+
+            IBackgroundJobProcess assetUpdateJob = jobs.FirstOrDefault(x => x.GetType() == typeof(AssetsUpdateJob));
+
+            RecurringJob.AddOrUpdate(() => assetUpdateJob.Execute(), Cron.Daily);
         }
     }
 }

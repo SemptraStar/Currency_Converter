@@ -5,10 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Api\currencies.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.6.17" />
+    <PackageReference Include="HangFire.Core" Version="1.6.17" />
+    <PackageReference Include="HangFire.SqlServer" Version="1.6.17" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
@@ -19,8 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CurrencyConverter.Api\CurrencyConverter.Api.csproj" />
-    <ProjectReference Include="..\CurrencyConverter.Data\CurrencyConverter.Data.csproj" />
+    <None Include="Api\currencies.json" />
   </ItemGroup>
 
 </Project>

@@ -31,7 +31,3 @@ D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\obj\Debug\net
 D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\obj\Debug\netcoreapp2.0\CurrencyConverter.AssemblyInfo.cs
 D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\obj\Debug\netcoreapp2.0\CurrencyConverter.dll
 D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\obj\Debug\netcoreapp2.0\CurrencyConverter.pdb
-D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\bin\Debug\netcoreapp2.0\CurrencyConverter.Data.dll
-D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\bin\Debug\netcoreapp2.0\CurrencyConverter.Data.pdb
-D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\bin\Debug\netcoreapp2.0\CurrencyConverter.Api.dll
-D:\Programming\CurrencyProject\CurrencyConverter\CurrencyConverter\bin\Debug\netcoreapp2.0\CurrencyConverter.Api.pdb

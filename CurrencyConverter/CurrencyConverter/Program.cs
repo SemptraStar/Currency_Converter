@@ -10,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-using CurrencyConverter.Data;
-
 namespace CurrencyConverter
 {
     public class Program
@@ -24,8 +22,6 @@ namespace CurrencyConverter
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseDefaultServiceProvider(options => options.ValidateScopes = false)
-                .UseShutdownTimeout(TimeSpan.FromMinutes(5))
                 .Build();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,17 +12,15 @@ namespace CurrencyConverter.Controllers
     {
         private IDbContext _dbContext;
 
-        private ICoinApi _coinApi;
+        private ICurrencyApi _currencyApi;
 
-        private IUahNBUApi _uahNbuApi;
-
-        public CurrencyController(IDbContext dbContext, ICoinApi coinApi, IUahNBUApi uahNBUApi)
+        public CurrencyController(
+            IDbContext dbContext,
+            ICurrencyApi currencyApi)
         {
             _dbContext = dbContext;
 
-            _coinApi = coinApi;
-
-            _uahNbuApi = uahNBUApi;
+            _currencyApi = currencyApi;
         }
 
         [HttpGet]
@@ -34,75 +30,54 @@ namespace CurrencyConverter.Controllers
             return Json(_dbContext.Set<Asset>().ToList());
         }
 
-        /*
-        [HttpGet]
-        [Route("api/currency/exchangerate/{baseId}")]
-        public JsonResult GetExchangeRate(string baseId)
-        {
-            return Json(_coinApi.ExchangeRatesGetAllCurrentRates(baseId));
-        }
-
         [HttpGet]
         [Route("api/currency/exchangerate/{baseId}/{quoteId}")]
         public JsonResult GetExchangeRate(string baseId, string quoteId)
         {
-            ExchangeRate rate;
+            var assets = _dbContext.Set<Asset>();
 
-            if (baseId.ToUpper() == "UAH" || quoteId.ToUpper() == "UAH")
-            {
-                rate = GetUahExchangeRate(baseId, quoteId);
-            }
-            else
-            {
-                rate = _coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId);
-            }
+            var baseAsset = assets.FirstOrDefault(x => x.AssetId == baseId);
+            var quoteAsset = assets.FirstOrDefault(x => x.AssetId == quoteId);
 
-            return Json(rate);
+            if (baseAsset == null || quoteAsset == null)
+                return Json(new { Message = "Asset not found" });
+
+            return Json(_currencyApi.GetSpecificRate(baseAsset, quoteAsset));
         }
 
         [HttpGet]
-        [Route("api/currency/exchangerate/{baseId}/{quoteId}/{time}")]
-        public JsonResult GetExchangeRate(string baseId, string quoteId, DateTime time)
+        [Route("api/currency/exchangerate/{baseId}/{quoteId}/{param}")]
+        public JsonResult GetExchangeRate(string baseId, string quoteId, string param)
         {
-            ExchangeRate rate;
+            bool isBaseCrypto = false;
+            bool isQuoteCrypto = false;
 
-            if (baseId.ToUpper() == "UAH" || quoteId.ToUpper() == "UAH")
+            switch (param)
             {
-                rate = GetUahExchangeRate(baseId, quoteId, time);
-            }
-            else
-            {
-                rate = _coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId, time);
+                case "crypto-to-crypto":
+                    isBaseCrypto = true;
+                    isQuoteCrypto = true;
+                    break;
+                case "base-to-crypto":
+                    isQuoteCrypto = true;
+                    break;
+                case "crypto-to-quote":
+                    isBaseCrypto = true;
+                    break;
             }
 
-            return Json(rate);
+            var assets = _dbContext.Set<Asset>();
+
+            var baseAsset = assets.FirstOrDefault(x => x.AssetId == baseId 
+                && x.IsTypeCrypto == isBaseCrypto);
+
+            var quoteAsset = assets.FirstOrDefault(x => x.AssetId == quoteId 
+                && x.IsTypeCrypto == isQuoteCrypto);
+
+            if (baseAsset == null || quoteAsset == null)
+                return Json(new { Message = "Asset not found" });
+
+            return Json(_currencyApi.GetSpecificRate(baseAsset, quoteAsset));
         }
-
-        private ExchangeRate GetUahExchangeRate(string baseId, string quoteId, DateTime time)
-        {
-            ExchangeRate rate = _coinApi.ExchangeRatesGetSpecificRate(baseId, quoteId, time);
-
-            if (rate.Rate != 0)
-                return rate;
-
-            if (baseId.ToUpper() == "UAH")
-            {
-                rate = (Exchangerate)_uahNbuApi.ExchangeRatesGetSpecificRate(quoteId, time);
-            }
-            else if (quoteId.ToUpper() == "UAH")
-            {
-                rate = (Exchangerate)_uahNbuApi.ExchangeRatesGetSpecificRate(baseId, time);
-
-                rate.AssetIdBase = baseId;
-                rate.AssetIdQuote = "UAH";
-            }
-
-            return rate;
-        }
-        private ExchangeRate GetUahExchangeRate(string baseId, string quoteId)
-        {
-            return GetUahExchangeRate(baseId, quoteId, DateTime.Now);
-        }
-        */
     }
 }
