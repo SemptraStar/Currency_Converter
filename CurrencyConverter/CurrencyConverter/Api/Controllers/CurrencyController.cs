@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 
-using Microsoft.AspNetCore.Mvc;
-
 using CurrencyConverter.Api.Interfaces;
 using CurrencyConverter.Data;
 using CurrencyConverter.Data.Models.DataModels;
 
-namespace CurrencyConverter.Controllers
+using Microsoft.AspNetCore.Mvc;
+
+namespace CurrencyConverter.Api.Controllers
 {
     public class CurrencyController : Controller
     {
@@ -19,7 +19,6 @@ namespace CurrencyConverter.Controllers
             ICurrencyApi currencyApi)
         {
             _dbContext = dbContext;
-
             _currencyApi = currencyApi;
         }
 
@@ -39,10 +38,15 @@ namespace CurrencyConverter.Controllers
             var baseAsset = assets.FirstOrDefault(x => x.AssetId == baseId);
             var quoteAsset = assets.FirstOrDefault(x => x.AssetId == quoteId);
 
-            if (baseAsset == null || quoteAsset == null)
-                return Json(new { Message = "Asset not found" });
+            if (baseAsset == null)
+                return Json(new { Message = "Base asset not found" });
 
-            return Json(_currencyApi.GetSpecificRate(baseAsset, quoteAsset));
+            if (quoteAsset == null)
+                return Json(new { Message = "Quote asset not found" });
+
+            ExchangeRate rate = _currencyApi.GetSpecificRate(baseAsset, quoteAsset);
+
+            return Json(new { Message = "Success", ExchangeRate = rate });
         }
 
         [HttpGet]
@@ -74,10 +78,15 @@ namespace CurrencyConverter.Controllers
             var quoteAsset = assets.FirstOrDefault(x => x.AssetId == quoteId 
                 && x.IsTypeCrypto == isQuoteCrypto);
 
-            if (baseAsset == null || quoteAsset == null)
-                return Json(new { Message = "Asset not found" });
+            if (baseAsset == null)
+                return Json(new { Message = "Base asset not found" });
 
-            return Json(_currencyApi.GetSpecificRate(baseAsset, quoteAsset));
+            if (quoteAsset == null)
+                return Json(new { Message = "Quote asset not found" });
+
+            ExchangeRate rate = _currencyApi.GetSpecificRate(baseAsset, quoteAsset);
+
+            return Json(new { Message = "Success", ExchangeRate = rate });
         }
     }
 }

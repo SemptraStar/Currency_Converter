@@ -1,8 +1,6 @@
 ﻿using CurrencyConverter.Data.Models.DataModels;
+
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CurrencyConverter.Data
 {
