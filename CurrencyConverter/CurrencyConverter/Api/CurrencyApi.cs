@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using CurrencyConverter.Api.Interfaces;
-using CurrencyConverter.Data.Models.DataModels;
+using CurrencyConverter.Data.Models.Currency;
 
 namespace CurrencyConverter.Api
 {

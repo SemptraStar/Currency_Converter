@@ -1,7 +1,6 @@
-﻿using CurrencyConverter.Data.Models.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+
+using CurrencyConverter.Data.Models.Currency;
 
 namespace CurrencyConverter.Api.Interfaces
 {

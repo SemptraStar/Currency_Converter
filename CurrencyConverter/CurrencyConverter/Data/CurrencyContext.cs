@@ -1,4 +1,5 @@
-﻿using CurrencyConverter.Data.Models.DataModels;
+﻿using CurrencyConverter.Data.Models.Currency;
+using CurrencyConverter.Data.Models.Users;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,10 @@ namespace CurrencyConverter.Data
         public DbSet<Asset> Assets { get; set; }
 
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
+
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Connection> Connections { get; set; }
 
         public CurrencyContext(DbContextOptions<CurrencyContext> options) : base(options)
         {

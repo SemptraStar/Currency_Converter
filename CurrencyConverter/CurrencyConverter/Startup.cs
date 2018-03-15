@@ -38,6 +38,8 @@ namespace CurrencyConverter
             
             services.AddSingleton<IBackgroundJobProcess, AssetsUpdateJob>();
 
+            services.AddSignalR();
+
             services.AddHangfire(options => options.UseSqlServerStorage(Configuration["ConnectionString"]));
 
             ConfigureJobs(services);

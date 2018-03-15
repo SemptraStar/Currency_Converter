@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Linq;
 
 using CurrencyConverter.Api.Json;
-using CurrencyConverter.Data.Models.DataModels;
+using CurrencyConverter.Data.Models.Currency;
 
 using Newtonsoft.Json;
 

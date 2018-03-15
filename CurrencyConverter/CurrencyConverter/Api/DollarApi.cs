@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 
 using CurrencyConverter.Api.Json;
-using CurrencyConverter.Data.Models.DataModels;
+using CurrencyConverter.Data.Models.Currency;
 
 namespace CurrencyConverter.Api
 {

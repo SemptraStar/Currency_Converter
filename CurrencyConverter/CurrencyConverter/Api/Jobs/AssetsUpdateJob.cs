@@ -5,7 +5,7 @@ using System.Linq;
 
 using CurrencyConverter.Api.Interfaces;
 using CurrencyConverter.Data;
-using CurrencyConverter.Data.Models.DataModels;
+using CurrencyConverter.Data.Models.Currency;
 
 using Newtonsoft.Json.Linq;
 

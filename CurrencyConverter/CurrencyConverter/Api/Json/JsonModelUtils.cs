@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-using CurrencyConverter.Data.Models.DataModels;
+using CurrencyConverter.Data.Models.Currency;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

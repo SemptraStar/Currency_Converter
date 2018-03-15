@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 using Newtonsoft.Json;
 
-namespace CurrencyConverter.Data.Models.DataModels
+namespace CurrencyConverter.Data.Models.Currency
 {
     public class Asset
     {
