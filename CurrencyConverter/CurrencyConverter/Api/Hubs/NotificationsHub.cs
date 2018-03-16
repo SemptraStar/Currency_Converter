@@ -49,7 +49,7 @@ namespace CurrencyConverter.Api.Hubs
 
         public void SendMessageToAllUsers(string message)
         {
-            Clients.All.SendAsync("addChatMessage", message);
+            Clients.All.SendAsync("RecieveMessage", message);
         }
 
         public override Task OnConnectedAsync()

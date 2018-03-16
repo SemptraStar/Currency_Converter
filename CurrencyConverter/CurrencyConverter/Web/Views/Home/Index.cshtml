@@ -1,0 +1,19 @@
+﻿<html>
+<head>
+<script src="~/scripts/signalr/dist/browser/signalr.min.js"></script>
+</head>
+<body>
+    <script>
+        
+        let connection = new signalR.HubConnection('/api/notifications');
+
+        connection.on('GetMessage', data => {
+            console.log(data);
+        });
+
+        connection.start()
+            .then(() => connection.invoke('RecieveMessage', 'Hello'));
+
+    </script>
+</body>
+</html>

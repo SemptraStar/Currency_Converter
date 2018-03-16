@@ -14,6 +14,8 @@ using CurrencyConverter.Api;
 using CurrencyConverter.Api.Interfaces;
 using CurrencyConverter.Data;
 using CurrencyConverter.Api.Jobs;
+using CurrencyConverter.Api.Hubs;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace CurrencyConverter
 {
@@ -30,6 +32,15 @@ namespace CurrencyConverter
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.Configure<RazorViewEngineOptions>(o =>
+            {
+                // {2} is area, {1} is controller,{0} is the action    
+                o.ViewLocationFormats.Clear();
+                o.ViewLocationFormats.Add("/Controllers/{1}/Views/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Controllers/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Web/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
+            });
 
             services.AddDbContext<CurrencyContext>(options => options.UseSqlServer(Configuration["ConnectionString"]));
             services.AddScoped<IDbContext>(provider => provider.GetService<CurrencyContext>());
@@ -57,7 +68,16 @@ namespace CurrencyConverter
                 routes.MapRoute(
                     name: "default", 
                     template: "api/{controller=Currency}/{action=GetAllAssets}"
-                ));
+                )
+                .MapRoute(
+                    name: "web",
+                    template: "{controller=Home}/{action=Index}"
+                    ));
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationsHub>("/api/notifications");
+            });
 
             app.UseHangfireDashboard();
             app.UseHangfireServer();

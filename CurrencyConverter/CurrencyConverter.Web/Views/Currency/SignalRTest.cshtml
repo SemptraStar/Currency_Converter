@@ -1,0 +1,23 @@
+﻿<html>
+<head>
+    <script src="~/scripts/signalr/dist/browser/signalr.min.js"></script>
+</head>
+<body>
+    <script>
+        let connection = new signalR.HubConnection('https://easyconvert.azurewebsites.net/api/notifications');
+
+        connection.on('GetMessage', data => {
+            console.log(data);
+        });
+
+        connection.on('GetErrorMessage', data => {
+            console.log(data);
+        });
+
+        connection.start()
+            .then(() => connection.invoke('SendMessageToAllUsers', 'Hello'));
+    </script>
+</body>
+</html>
+
+
