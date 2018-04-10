@@ -1,0 +1,25 @@
+﻿<http>
+<head>
+    <script src="~/scripts/aspnet/signalr/dist/browser/signalr.js"></script>
+
+    <script>
+        let connection = new signalR.HubConnection('api/notifications');
+        connection.headers.add("Authorization", "Bearer 123");
+
+        connection.on('GetMessage', data => {
+            console.log(data);
+        });
+
+        connection.on('GetConnectionInfo', data => {
+            console.log(data);
+        });
+
+        connection.start();
+    </script>
+</head>
+<body>
+    <p>Message: @ViewBag.Message</p>
+
+    <button onclick="connection.invoke('GetCurrentUserAndConnection')">Send "Hello"</button>
+</body>
+</http>

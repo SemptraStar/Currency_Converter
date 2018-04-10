@@ -1,2 +1,3 @@
 # Currency_Converter
-Currency converter project for some stupid subject
+
+Convert the world of currencies with currencies' converter!
