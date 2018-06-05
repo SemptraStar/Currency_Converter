@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,11 @@ using CurrencyConverter.Data;
 using CurrencyConverter.Api.Jobs;
 using CurrencyConverter.Api.Hubs;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CurrencyConverter
 {
@@ -34,21 +38,24 @@ namespace CurrencyConverter
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentity<IdentityUser, IdentityRole>();
-            services.AddAuthentication(
-                v => {
-                    v.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-                    v.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                }
-            )
-            .AddGoogle(
-                googleOptions =>
-                {
-                    googleOptions.ClientId = "918564697902-7qscjgn9ldnioinclim0qtul4ad66p0p.apps.googleusercontent.com";
-                    googleOptions.ClientSecret = "Q_c1lCa0BaLHZiMpUibJVXxv";
-                }
-            );
             
             services.AddMvc();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
+                });
+            
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
             services.Configure<RazorViewEngineOptions>(o =>
             {
@@ -81,6 +88,9 @@ namespace CurrencyConverter
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
+            app.UseMvcWithDefaultRoute();
+            
             app
                 .UseAuthentication()
                 .UseMvc(routes => 
